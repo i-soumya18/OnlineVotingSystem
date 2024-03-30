@@ -1,16 +1,17 @@
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DAO {
 
     private final String url = "jdbc:mysql://localhost:3306/vote_data";
     private final String username = "root";
     private final String password = "soumya";
+    private final Logger logger = Logger.getLogger(DAO.class.getName());
 
     public void insertVoter(String fname, String lname, String gender, String pno, String prn, String password) throws VoteException {
         try (Connection conn = DriverManager.getConnection(url, username, password)) {
@@ -25,9 +26,16 @@ public class DAO {
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
-            throw new VoteException("Error inserting voter: " + ex.getMessage());
+            String errorMessage = "Error inserting voter: " + ex.getMessage();
+            logger.log(Level.SEVERE, errorMessage, ex);
+            throw new VoteException(errorMessage);
         }
     }
+
+    // Implement other methods similarly
+
+
+
 
     public int selectAdmin(String username, String password) throws VoteException {
         try (Connection conn = DriverManager.getConnection(url, username, password)) {

@@ -1,8 +1,11 @@
-
-
 import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VoteFrame extends javax.swing.JFrame {
+
+    private final Logger logger = Logger.getLogger(VoteFrame.class.getName());
+    private int vote; // Variable to store the selected vote option
 
     public VoteFrame() {
         initComponents();
@@ -153,17 +156,22 @@ public class VoteFrame extends javax.swing.JFrame {
             return;
         }
 
-        new VoteService().addVote(vote);
+        try {
+            new VoteService().addVote(vote);
 
-        // Display a message to inform the user that their vote has been successfully submitted
-        JOptionPane.showMessageDialog(this, "Your vote has been submitted successfully!");
+            // Display a message to inform the user that their vote has been successfully submitted
+            JOptionPane.showMessageDialog(this, "Your vote has been submitted successfully!");
 
-        // Close the current frame and show the exit frame
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ExitFrame().setVisible(true);
-            }
-        });
+            // Close the current frame and show the exit frame
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new ExitFrame().setVisible(true);
+                }
+            });
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Error during vote submission: " + ex.getMessage(), ex);
+            JOptionPane.showMessageDialog(this, "An error occurred during vote submission. Please try again later.");
+        }
     }
 
     // Variables declaration
@@ -175,5 +183,4 @@ public class VoteFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton vote5_button;
     private javax.swing.JRadioButton vote6_button;
     private javax.swing.JLabel vote_label;
-    private int vote; // Variable to store the selected vote option
 }

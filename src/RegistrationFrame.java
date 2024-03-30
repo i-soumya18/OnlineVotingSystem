@@ -1,15 +1,16 @@
-
-
 import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegistrationFrame extends javax.swing.JFrame {
+
+    private final Logger logger = Logger.getLogger(RegistrationFrame.class.getName());
 
     public RegistrationFrame() {
         initComponents();
     }
 
     private void initComponents() {
-
         firstNameLabel = new javax.swing.JLabel();
         lastNameLabel = new javax.swing.JLabel();
         genderLabel = new javax.swing.JLabel();
@@ -118,11 +119,16 @@ public class RegistrationFrame extends javax.swing.JFrame {
         String prn = prnTextField.getText();
         String password = new String(passwordField.getPassword());
 
-        boolean isRegistered = new RegisterService().addVoter(firstName, lastName, gender, phone, prn, password);
-        if (isRegistered) {
-            JOptionPane.showMessageDialog(this, "Registration successful!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Failed to register. Please try again.");
+        try {
+            boolean isRegistered = new RegisterService().addVoter(firstName, lastName, gender, phone, prn, password);
+            if (isRegistered) {
+                JOptionPane.showMessageDialog(this, "Registration successful!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to register. Please try again.");
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Error during registration: " + ex.getMessage(), ex);
+            JOptionPane.showMessageDialog(this, "An error occurred during registration. Please try again later.");
         }
     }
 
@@ -134,6 +140,7 @@ public class RegistrationFrame extends javax.swing.JFrame {
         });
     }
 
+    // Variables declaration
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JTextField firstNameTextField;
     private javax.swing.JLabel genderLabel;
@@ -147,4 +154,5 @@ public class RegistrationFrame extends javax.swing.JFrame {
     private javax.swing.JLabel prnLabel;
     private javax.swing.JTextField prnTextField;
     private javax.swing.JButton registerButton;
+    // End of variables declaration
 }

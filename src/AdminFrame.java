@@ -1,6 +1,6 @@
-
-
 import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdminFrame extends javax.swing.JFrame {
 
@@ -22,21 +22,33 @@ public class AdminFrame extends javax.swing.JFrame {
         viewResultsButton.setText("View Results");
         viewResultsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewResultsButtonActionPerformed(evt);
+                try {
+                    viewResultsButtonActionPerformed(evt);
+                } catch (Exception ex) {
+                    handleException("Error viewing results", ex);
+                }
             }
         });
 
         manageVotersButton.setText("Manage Voters");
         manageVotersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manageVotersButtonActionPerformed(evt);
+                try {
+                    manageVotersButtonActionPerformed(evt);
+                } catch (Exception ex) {
+                    handleException("Error managing voters", ex);
+                }
             }
         });
 
         logoutButton.setText("Logout");
         logoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutButtonActionPerformed(evt);
+                try {
+                    logoutButtonActionPerformed(evt);
+                } catch (Exception ex) {
+                    handleException("Error logging out", ex);
+                }
             }
         });
 
@@ -87,6 +99,13 @@ public class AdminFrame extends javax.swing.JFrame {
         // Implement logout functionality (e.g., return to Welcome Frame)
         new WelcomeFrame().setVisible(true);
         this.dispose(); // Close the current Admin Frame
+    }
+
+    private void handleException(String message, Exception ex) {
+        // Log the exception
+        Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, message, ex);
+        // Show an error message to the user
+        JOptionPane.showMessageDialog(this, "An error occurred: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(String args[]) {
